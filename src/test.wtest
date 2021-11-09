@@ -1,0 +1,61 @@
+import cumbre.*
+import conocimientos.*
+import paisesEmpresas.*
+import participantes.*
+
+describe "test"{
+	const argentina = new Pais()
+	const brasil = new Pais()
+	const colombia = new Pais()
+	const CoreaDelSur = new Pais()
+	const CoreaDelNorte = new Pais()
+	
+	//PROGRAMADOR
+	const juana = new Programador(pais = argentina, commits = 600)
+	const lucia = new Programador(pais = brasil, commits = 800)
+	//ESPECIALISTA
+	const mariana = new Especialista(pais = argentina, commits = 200)
+	const susana = new Especialista(pais = colombia, commits = 1500)
+	
+	method initialize(){
+		juana.agregarConocimiento(programacionBasica)
+		juana.agregarConocimiento(css)
+		juana.agregarConocimiento(html)
+		lucia.agregarConocimiento(programacionBasica)
+		lucia.agregarConocimiento(basesDeDatos)
+		
+		mariana.agregarConocimiento(programacionBasica)
+		mariana.agregarConocimiento(instalacionLinux)
+		mariana.agregarConocimiento(objetos)
+		mariana.agregarConocimiento(disenioConObjetos)
+		
+		susana.agregarConocimiento(programacionBasica)
+		susana.agregarConocimiento(objetos)
+		
+		cumbre.agregarAuspiciante(argentina)
+		cumbre.agregarAuspiciante(colombia)
+		cumbre.agregarAuspiciante(CoreaDelNorte)
+		CoreaDelSur.registrarConflicto(CoreaDelNorte)
+		CoreaDelNorte.registrarConflicto(CoreaDelSur)
+		argentina.registrarConflicto(colombia)
+		cumbre.registrarParticipante(juana)
+		cumbre.registrarParticipante(lucia)
+		cumbre.registrarParticipante(mariana)
+	}
+	test "cumbre relevante"{
+		assert.that(cumbre.esRelevante())
+	}
+	test "cumbre no relevante con susana"{
+		cumbre.registrarParticipante(susana)
+		assert.notThat(cumbre.esRelevante())
+	}
+	test "es conflictivo Corea Del Sur"{
+		assert.that(cumbre.esConflictivo(CoreaDelSur))
+	}
+	test "participante extranjera lucia"{
+		assert.equals(#{lucia},cumbre.participantesExtranjeros())
+	}
+	test "pais con mas participantes Argentina"{
+		assert.equals(argentina,cumbre.paisConMasParticipantes())
+	}
+}
